@@ -1,24 +1,63 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ Sơ Năng Lực - Phạm Minh Nhật</title>
+    <title>Hồ Sơ Cá Nhân của Phạm Minh Nhật</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (via CDN for single file setup) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <!-- Chart.js for Dashboards -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config Customization -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
+        /* Custom Styles for smoothness and effects */
         body {
-            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+            overflow-x: hidden;
         }
         
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -34,535 +73,711 @@
             background: #475569; 
         }
 
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-        .slide-up {
-            animation: slideUp 0.5s ease-out forwards;
-        }
+        /* Modal Animation */
         .modal-enter {
-            animation: fadeIn 0.2s ease-out forwards;
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #2dd4bf, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Nav active state */
-        .nav-btn.active {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        
+        /* Timeline styling */
+        .timeline-dot {
+            box-shadow: 0 0 0 4px #0f172a, inset 0 2px 0 rgba(0,0,0,.08), 0 3px 0 4px rgba(0,0,0,.05);
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col md:flex-row selection:bg-blue-500/30">
+<body class="antialiased font-sans leading-relaxed selection:bg-brand-500 selection:text-white">
 
-    <!-- Sidebar Profile -->
-    <aside class="w-full md:w-80 md:h-screen sticky top-0 bg-slate-900 border-r border-slate-800 p-6 flex flex-col z-10 overflow-y-auto slide-up">
-        <div class="text-center mb-8">
-            <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1 mb-4 shadow-[0_0_30px_rgba(59,130,246,0.3)]">
-                <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center border-4 border-slate-900">
-                    <span class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">PMN</span>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="font-bold text-xl tracking-wider text-white">PM<span class="text-brand-400">NHAT</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Tổng quan</a>
+                        <a href="#dashboard" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
+                        <a href="#experience" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Kinh nghiệm</a>
+                        <a href="#projects" class="hover:text-brand-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dự án & Kỹ năng</a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
                 </div>
             </div>
-            <h1 class="text-2xl font-bold text-white mb-1 tracking-tight">PHẠM MINH NHẬT</h1>
-            <p class="text-blue-400 font-medium text-sm mb-3">Network Admin & Fullstack Dev</p>
-            <div class="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold">
-                Sẵn sàng hợp tác
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-slate-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="block hover:bg-slate-700 hover:text-brand-400 px-3 py-2 rounded-md text-base font-medium">Tổng quan</a>
+                <a href="#dashboard" class="block hover:bg-slate-700 hover:text-brand-400 px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="#experience" class="block hover:bg-slate-700 hover:text-brand-400 px-3 py-2 rounded-md text-base font-medium">Kinh nghiệm</a>
+                <a href="#projects" class="block hover:bg-slate-700 hover:text-brand-400 px-3 py-2 rounded-md text-base font-medium">Dự án</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="about" class="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 min-h-[90vh] justify-center">
+        <div class="w-full md:w-1/2 space-y-6 z-10">
+            <div class="inline-flex items-center space-x-2 bg-slate-800 rounded-full px-4 py-1.5 border border-slate-700">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
+                </span>
+                <span class="text-sm font-medium text-slate-300">Sẵn sàng đón nhận cơ hội mới</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
+                Chào bạn, tôi là <br>
+                <span class="text-gradient">Phạm Minh Nhật</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-400 leading-relaxed">
+                Học sinh lớp 12 đam mê <span class="text-white font-semibold">Công nghệ Thông tin & Kinh tế</span>. Sở hữu kinh nghiệm thực chiến từ quản trị mạng, lập trình đến vận hành kinh doanh. Nhạy bén trong việc ứng dụng <span class="text-brand-400 font-semibold">Trí tuệ Nhân tạo (AI)</span> để tự động hóa và tối ưu hiệu suất.
+            </p>
+            
+            <div class="flex flex-wrap gap-4 pt-4">
+                <a href="#contact" onclick="openModal('contactModal')" class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-3 rounded-lg font-medium transition-all shadow-[0_0_15px_rgba(45,212,191,0.3)] hover:shadow-[0_0_25px_rgba(45,212,191,0.5)] flex items-center gap-2">
+                    <i class="fas fa-envelope"></i> Liên hệ ngay
+                </a>
+                <a href="https://drive.google.com/drive/folders/1Mit2vHtr9Rg28t5fETqP1m8RddB-HAwW" target="_blank" class="glass-panel hover:bg-slate-700 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2">
+                    <i class="fas fa-certificate text-brand-400"></i> Xem chứng chỉ AI
+                </a>
+            </div>
+
+            <div class="flex items-center gap-6 pt-6 text-slate-400">
+                <a href="mailto:phamnhattkchinh@gmail.com" class="hover:text-brand-400 transition-colors text-2xl"><i class="fas fa-envelope"></i></a>
+                <a href="tel:0354830400" class="hover:text-brand-400 transition-colors text-2xl"><i class="fas fa-phone"></i></a>
+                <a href="https://www.tiktok.com/@thebaovn?_r=1&_t=ZS-95aHur7zMUH" target="_blank" class="hover:text-white transition-colors text-2xl"><i class="fab fa-tiktok"></i></a>
+                <a href="https://thebao-vn.github.io/hosocanhan" target="_blank" class="hover:text-brand-400 transition-colors text-2xl"><i class="fas fa-globe"></i></a>
             </div>
         </div>
 
-        <nav class="space-y-2 flex-1 mb-8">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-slate-400 border border-transparent hover:bg-slate-800 hover:text-white">
-                <i data-lucide="pie-chart" class="w-5 h-5"></i>
-                <span class="font-medium">Dashboard</span>
-            </button>
-            <button onclick="switchTab('experience')" id="btn-experience" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-slate-400 border border-transparent hover:bg-slate-800 hover:text-white">
-                <i data-lucide="briefcase" class="w-5 h-5"></i>
-                <span class="font-medium">Kinh nghiệm</span>
-            </button>
-            <button onclick="switchTab('projects')" id="btn-projects" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-slate-400 border border-transparent hover:bg-slate-800 hover:text-white">
-                <i data-lucide="code" class="w-5 h-5"></i>
-                <span class="font-medium">Dự án & IT</span>
-            </button>
-            <button onclick="switchTab('skills')" id="btn-skills" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-slate-400 border border-transparent hover:bg-slate-800 hover:text-white">
-                <i data-lucide="cpu" class="w-5 h-5"></i>
-                <span class="font-medium">Kỹ năng & AI</span>
-            </button>
-        </nav>
-
-        <div class="space-y-3 pt-6 border-t border-slate-800 text-sm">
-            <a href="tel:0354830400" class="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors"><i data-lucide="phone" class="w-4 h-4"></i></div>
-                0354830400
-            </a>
-            <a href="mailto:phamnhattkchinh@gmail.com" class="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group overflow-hidden">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-purple-500/20 group-hover:text-purple-400 transition-colors flex-shrink-0"><i data-lucide="mail" class="w-4 h-4"></i></div>
-                <span class="truncate">phamnhattkchinh@gmail.com</span>
-            </a>
-            <div class="flex items-center gap-3 text-slate-400 group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-emerald-500/20 group-hover:text-emerald-400 transition-colors"><i data-lucide="map-pin" class="w-4 h-4"></i></div>
-                Đại Hải, TP Cần Thơ
+        <div class="w-full md:w-1/2 relative flex justify-center mt-10 md:mt-0">
+            <!-- Decorative background blob -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-brand-500 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-pulse"></div>
+            
+            <!-- Image Container -->
+            <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-2 border-slate-700 p-2 glass-panel z-10 transform hover:scale-105 transition-transform duration-500">
+                <div class="w-full h-full rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                    <!-- THAY ẢNH CỦA BẠN VÀO ĐÂY (dùng link ảnh hoặc file cục bộ) -->
+                    <img src="https://ui-avatars.com/api/?name=Pham+Minh+Nhat&background=0d9488&color=fff&size=512" alt="" class="w-full h-full object-cover">
+                </div>
             </div>
             
-            <!-- Link Chứng chỉ AI -->
-            <a href="https://drive.google.com/drive/folders/1Mit2vHtr9Rg28t5fETqP1m8RddB-HAwW" target="_blank" rel="noreferrer" class="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-yellow-500/20 group-hover:text-yellow-400 transition-colors"><i data-lucide="award" class="w-4 h-4"></i></div>
-                Chứng chỉ AI (Drive)
-            </a>
-            <!-- Link TikTok -->
-            <a href="https://www.tiktok.com/@thebaovn?_r=1&_t=ZS-95aHur7zMUH" target="_blank" rel="noreferrer" class="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-pink-500/20 group-hover:text-pink-400 transition-colors"><i data-lucide="play-circle" class="w-4 h-4"></i></div>
-                TikTok: @thebaovn
-            </a>
+            <!-- Floating Badges -->
+            <div class="absolute top-10 right-0 md:-right-10 glass-panel px-4 py-2 rounded-lg flex items-center gap-3 z-20 shadow-lg border border-slate-600 animate-bounce" style="animation-duration: 3s;">
+                <i class="fas fa-chart-line text-green-400 text-xl"></i>
+                <div>
+                    <p class="text-xs text-slate-400">Doanh thu 2025</p>
+                    <p class="font-bold text-white">110M+ VNĐ</p>
+                </div>
+            </div>
         </div>
-    </aside>
+    </section>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 h-screen overflow-y-auto p-6 md:p-10 relative bg-slate-950">
-        <div class="max-w-5xl mx-auto">
-            
-            <!-- Header -->
-            <header class="mb-10 slide-up" style="animation-delay: 0.1s;">
-                <h2 id="page-title" class="text-3xl md:text-4xl font-bold text-white mb-4">Tổng quan chỉ số</h2>
-                <p id="page-subtitle" class="text-slate-400 text-lg max-w-2xl leading-relaxed">
-                    Học sinh lớp 12 - Chuyên gia ứng dụng AI & Vận hành Hệ thống. Kết hợp tư duy kỹ thuật hệ thống, khả năng lập trình và độ nhạy bén trong kinh doanh.
-                </p>
-            </header>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-2">Thống kê & <span class="text-brand-400">Hiệu suất</span></h2>
+                <p class="text-slate-400">Bảng điều khiển trực quan về dự án kinh doanh "THE BÁO"</p>
+            </div>
 
-            <!-- ================= VIEW: DASHBOARD ================= -->
-            <div id="view-dashboard" class="view-section space-y-8 fade-in">
-                <!-- KPI Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- KPI 1 -->
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden group hover:border-slate-600 transition-all">
-                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity group-hover:scale-110 transform duration-300 text-emerald-400">
-                            <i data-lucide="trending-up" class="w-8 h-8"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Stat Card 1 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-slate-400 mb-1">Tổng doanh thu (2025)</p>
+                            <h3 class="text-2xl font-bold text-white">110.103.500₫</h3>
                         </div>
-                        <p class="text-slate-400 text-sm font-medium mb-1">Doanh thu THE BÁO</p>
-                        <div class="flex items-baseline gap-1">
-                            <h3 class="text-3xl font-bold text-white">110.1M+</h3>
-                            <span class="text-slate-500 text-sm">VNĐ</span>
+                        <div class="p-3 rounded-lg bg-green-500/20 text-green-400">
+                            <i class="fas fa-wallet text-xl"></i>
                         </div>
                     </div>
-                    <!-- KPI 2 -->
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden group hover:border-slate-600 transition-all">
-                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity group-hover:scale-110 transform duration-300 text-blue-400">
-                            <i data-lucide="server" class="w-8 h-8"></i>
-                        </div>
-                        <p class="text-slate-400 text-sm font-medium mb-1">Hệ thống Mạng & Router</p>
-                        <div class="flex items-baseline gap-1">
-                            <h3 class="text-3xl font-bold text-white">10+</h3>
-                            <span class="text-slate-500 text-sm">Dòng</span>
-                        </div>
-                    </div>
-                    <!-- KPI 3 -->
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden group hover:border-slate-600 transition-all">
-                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity group-hover:scale-110 transform duration-300 text-purple-400">
-                            <i data-lucide="cpu" class="w-8 h-8"></i>
-                        </div>
-                        <p class="text-slate-400 text-sm font-medium mb-1">Mô hình AI áp dụng</p>
-                        <div class="flex items-baseline gap-1">
-                            <h3 class="text-3xl font-bold text-white">06</h3>
-                            <span class="text-slate-500 text-sm">Models</span>
-                        </div>
-                    </div>
-                    <!-- KPI 4 -->
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden group hover:border-slate-600 transition-all">
-                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity group-hover:scale-110 transform duration-300 text-orange-400">
-                            <i data-lucide="code" class="w-8 h-8"></i>
-                        </div>
-                        <p class="text-slate-400 text-sm font-medium mb-1">Dự án & Web Tools</p>
-                        <div class="flex items-baseline gap-1">
-                            <h3 class="text-3xl font-bold text-white">05+</h3>
-                            <span class="text-slate-500 text-sm">Projects</span>
-                        </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-400 flex items-center"><i class="fas fa-arrow-up mr-1"></i> Tăng trưởng tốt</span>
                     </div>
                 </div>
 
-                <!-- Advanced Dashboard Sections -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Revenue Structure -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
-                                Cơ cấu doanh thu THE BÁO (2025)
-                            </h3>
+                <!-- Stat Card 2 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-slate-400 mb-1">Thời gian vận hành</p>
+                            <h3 class="text-2xl font-bold text-white">> 1.5 Năm</h3>
                         </div>
-                        <div class="space-y-4">
-                            <div class="space-y-1.5">
-                                <div class="flex justify-between text-sm">
-                                    <span class="font-medium text-blue-400">Dịch vụ VNG</span>
-                                    <span class="text-white">68%</span>
-                                </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-blue-600 to-blue-400 h-2.5 rounded-full" style="width: 68%"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-1.5">
-                                <div class="flex justify-between text-sm">
-                                    <span class="font-medium text-rose-400">Garena</span>
-                                    <span class="text-white">16%</span>
-                                </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-rose-600 to-rose-400 h-2.5 rounded-full" style="width: 16%"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-1.5">
-                                <div class="flex justify-between text-sm">
-                                    <span class="font-medium text-slate-300">Khác (Dịch vụ & Thẻ khác)</span>
-                                    <span class="text-white">15%</span>
-                                </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-slate-500 h-2.5 rounded-full" style="width: 15%"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-1.5">
-                                <div class="flex justify-between text-sm">
-                                    <span class="font-medium text-amber-400">Thẻ quốc tế</span>
-                                    <span class="text-white">1%</span>
-                                </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-amber-400 h-2.5 rounded-full" style="width: 1%"></div>
-                                </div>
-                            </div>
+                        <div class="p-3 rounded-lg bg-blue-500/20 text-blue-400">
+                            <i class="fas fa-calendar-alt text-xl"></i>
                         </div>
                     </div>
+                    <div class="mt-4 text-sm text-slate-400">Từ 08/2024 đến nay</div>
+                </div>
 
-                    <!-- Quick Highlight -->
-                    <div class="bg-gradient-to-br from-blue-900/40 to-purple-900/40 border border-blue-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center">
-                        <div class="absolute -right-10 -top-10 opacity-10 text-white">
-                            <i data-lucide="award" class="w-48 h-48"></i>
+                <!-- Stat Card 3 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-slate-400 mb-1">Mảng dịch vụ chính</p>
+                            <h3 class="text-2xl font-bold text-white">Nạp Game & Mạng</h3>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-2 relative z-10">Điểm sáng nổi bật</h3>
-                        <p class="text-blue-200/80 mb-4 relative z-10">
-                            Bắt đầu sự nghiệp kỹ thuật và kinh doanh ngay từ khi ngồi trên ghế nhà trường (Lớp 11 & 12).
-                        </p>
-                        <ul class="space-y-2 relative z-10">
-                            <li class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400"></i> Quản trị đội nhóm đa thế hệ (1998-2009).</li>
-                            <li class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400"></i> Áp dụng AI tăng x3 hiệu suất công việc.</li>
-                            <li class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400"></i> Am hiểu tài chính: Cổ phiếu, Trái phiếu.</li>
-                        </ul>
+                        <div class="p-3 rounded-lg bg-purple-500/20 text-purple-400">
+                            <i class="fas fa-gamepad text-xl"></i>
+                        </div>
                     </div>
+                    <div class="mt-4 text-sm text-slate-400">Trong nước & Quốc tế</div>
                 </div>
             </div>
 
-            <!-- ================= VIEW: EXPERIENCE ================= -->
-            <div id="view-experience" class="view-section hidden space-y-6 fade-in">
-                <div class="border-l-2 border-slate-800 ml-3 md:ml-0 space-y-8 pl-6 relative">
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Chart 1: Service Breakdown -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Cơ cấu dịch vụ cửa hàng THE BÁO</h3>
+                    <div class="relative h-64 w-full flex justify-center">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Skills / Tech Radar or Bars -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col justify-center">
+                    <h3 class="text-lg font-semibold text-white mb-6">Mức độ thành thạo Kỹ năng</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-slate-300">Ứng dụng AI (Gemini, ChatGPT, Claude...)</span>
+                                <span class="text-sm font-medium text-brand-400">95%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-brand-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-slate-300">Quản trị Hệ thống Mạng (Viettel/VNPT/FPT)</span>
+                                <span class="text-sm font-medium text-brand-400">90%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-slate-300">Kinh doanh & Bán hàng trực tuyến</span>
+                                <span class="text-sm font-medium text-brand-400">85%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-slate-300">Web Dev (HTML/CSS/JS/Firebase)</span>
+                                <span class="text-sm font-medium text-brand-400">80%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline Section -->
+    <section id="experience" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-2">Hành trình <span class="text-brand-400">Thực chiến</span></h2>
+                <p class="text-slate-400">Kinh nghiệm làm việc chuyên nghiệp dù đang ngồi trên ghế nhà trường</p>
+            </div>
+
+            <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12">
+                
+                <!-- Viettel Experience -->
+                <div class="relative pl-8 md:pl-0">
+                    <div class="md:hidden absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 timeline-dot"></div>
+                    <div class="hidden md:block absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 timeline-dot"></div>
                     
-                    <!-- Exp 1 -->
-                    <div class="relative group">
-                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[31px] mt-1.5 shadow-[0_0_10px_rgba(59,130,246,0.8)] border-4 border-slate-950"></div>
-                        <div onclick="openModal('exp1')" class="bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-2xl cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/20 group">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Viettel</h3>
-                                <span class="text-sm font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full w-fit mt-2 md:mt-0">08/2024 - 03/2026</span>
-                            </div>
-                            <h4 class="text-lg text-slate-300 mb-3">Cộng tác viên Kỹ thuật & Bán hàng</h4>
-                            <p class="text-slate-400 text-sm mb-4">Quản trị hạ tầng mạng & Kinh doanh dịch vụ viễn thông.</p>
-                            <button class="text-blue-400 text-sm font-medium flex items-center gap-1 hover:text-blue-300 transition-colors">
-                                Xem chi tiết (Popup) <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                            </button>
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-brand-500 transition-all cursor-pointer group" onclick="openModal('viettelModal')">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-2">
+                            <h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Cộng tác viên Kỹ thuật & Bán hàng</h3>
+                            <span class="px-3 py-1 bg-slate-800 text-brand-400 text-sm rounded-full border border-brand-500/30 whitespace-nowrap">08/2024 - Hiện tại</span>
                         </div>
+                        <h4 class="text-lg text-slate-300 mb-4 font-medium"><i class="fas fa-building text-slate-500 mr-2"></i>Tập đoàn Công nghiệp - Viễn thông Quân đội (Viettel)</h4>
+                        <p class="text-slate-400 mb-4 line-clamp-2">Thực hiện các nghiệp vụ bán hàng, sửa chữa hạ tầng hệ thống mạng. Cấu hình thiết bị mạng Viettel, VNPT, FPT. Xây dựng tệp khách hàng cá nhân...</p>
+                        <button class="text-brand-400 text-sm font-medium hover:text-brand-300 flex items-center">
+                            Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs transition-transform group-hover:translate-x-1"></i>
+                        </button>
                     </div>
-
-                    <!-- Exp 2 -->
-                    <div class="relative group">
-                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[31px] mt-1.5 shadow-[0_0_10px_rgba(59,130,246,0.8)] border-4 border-slate-950"></div>
-                        <div onclick="openModal('exp2')" class="bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-2xl cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/20 group">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">THE BÁO Store</h3>
-                                <span class="text-sm font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full w-fit mt-2 md:mt-0">08/2024 - 03/2026</span>
-                            </div>
-                            <h4 class="text-lg text-slate-300 mb-3">Nhà sáng lập & Quản lý</h4>
-                            <p class="text-slate-400 text-sm mb-4">Vận hành hệ thống kinh doanh dịch vụ Game & Thẻ trực tuyến.</p>
-                            <button class="text-blue-400 text-sm font-medium flex items-center gap-1 hover:text-blue-300 transition-colors">
-                                Xem chi tiết (Popup) <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
+
+                <!-- THE BÁO Experience -->
+                <div class="relative pl-8 md:pl-0">
+                    <div class="md:hidden absolute w-4 h-4 bg-blue-500 rounded-full -left-[9px] top-1 timeline-dot"></div>
+                    <div class="hidden md:block absolute w-4 h-4 bg-blue-500 rounded-full -left-[9px] top-1 timeline-dot"></div>
+                    
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group" onclick="openModal('thebaoModal')">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-2">
+                            <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Nhà sáng lập & Quản lý</h3>
+                            <span class="px-3 py-1 bg-slate-800 text-blue-400 text-sm rounded-full border border-blue-500/30 whitespace-nowrap">08/2024 - Hiện tại</span>
+                        </div>
+                        <h4 class="text-lg text-slate-300 mb-4 font-medium"><i class="fas fa-store text-slate-500 mr-2"></i>Cửa hàng "THE BÁO"</h4>
+                        <p class="text-slate-400 mb-4 line-clamp-2">Vận hành cửa hàng kinh doanh mảng "Nạp Game Trực Tuyến" trong và ngoài nước. Đạt doanh thu ấn tượng, tối ưu hóa cơ cấu dịch vụ...</p>
+                        <button class="text-blue-400 text-sm font-medium hover:text-blue-300 flex items-center">
+                            Xem chi tiết <i class="fas fa-arrow-right ml-1 text-xs transition-transform group-hover:translate-x-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects & Skills Cards -->
+    <section id="projects" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-2">Dự án & <span class="text-brand-400">Năng lực cốt lõi</span></h2>
+                <p class="text-slate-400">Các sản phẩm tiêu biểu và kỹ năng chuyên môn</p>
             </div>
 
-            <!-- ================= VIEW: PROJECTS ================= -->
-            <div id="view-projects" class="view-section hidden grid grid-cols-1 md:grid-cols-2 gap-6 fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Project 1 -->
-                <div onclick="openModal('prj1')" class="bg-slate-900 border border-slate-800 hover:border-purple-500/50 p-6 rounded-2xl cursor-pointer transition-all group hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-900/20 flex flex-col h-full">
-                    <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i data-lucide="terminal" class="w-6 h-6"></i>
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onclick="openModal('webModal')">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 mb-4">
+                        <i class="fas fa-code text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">Hệ sinh thái Bán hàng & Web Tool</h3>
-                    <p class="text-purple-400 text-sm font-medium mb-3">Fullstack Development</p>
-                    <p class="text-slate-400 text-sm flex-1">Phát triển công cụ quản lý bán hàng trên nền tảng Web với Firebase.</p>
-                    <div class="mt-6 flex items-center gap-2 text-slate-500 text-sm group-hover:text-purple-300 transition-colors">
-                        <i data-lucide="external-link" class="w-4 h-4"></i> Khám phá dự án
+                    <h3 class="text-xl font-bold text-white mb-2">Lập trình Website & Tool</h3>
+                    <p class="text-slate-400 text-sm mb-4">Trực tiếp lập trình web bán hàng, web khóa học, profile team. Tích hợp HTML, CSS, JS và Firebase.</p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">HTML/CSS</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">JS</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Firebase</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">GitHub</span>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
-                <div onclick="openModal('prj2')" class="bg-slate-900 border border-slate-800 hover:border-purple-500/50 p-6 rounded-2xl cursor-pointer transition-all group hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-900/20 flex flex-col h-full">
-                    <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i data-lucide="target" class="w-6 h-6"></i>
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onclick="openModal('aiModal')">
+                    <div class="w-12 h-12 bg-brand-500/20 rounded-xl flex items-center justify-center text-brand-400 mb-4">
+                        <i class="fas fa-brain text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">Quản lý truyền thông @thebaovn</h3>
-                    <p class="text-purple-400 text-sm font-medium mb-3">Social Media & Video Edit</p>
-                    <p class="text-slate-400 text-sm flex-1">Kênh TikTok với lượt view ổn định, ứng dụng AI vào sản xuất nội dung.</p>
-                    <div class="mt-6 flex items-center gap-2 text-slate-500 text-sm group-hover:text-purple-300 transition-colors">
-                        <i data-lucide="external-link" class="w-4 h-4"></i> Khám phá dự án
+                    <h3 class="text-xl font-bold text-white mb-2">Ứng dụng AI Chuyên sâu</h3>
+                    <p class="text-slate-400 text-sm mb-4">Huấn luyện và ứng dụng Gemini, ChatGPT, Claude... vào bán hàng, tạo video và nâng cao hiệu suất làm việc.</p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Prompt Engineering</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Automation</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onclick="openModal('mediaModal')">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center text-pink-400 mb-4">
+                        <i class="fab fa-tiktok text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Truyền thông MXH</h3>
+                    <p class="text-slate-400 text-sm mb-4">Xây dựng, quản lý và chỉnh sửa video kênh TikTok cá nhân (@thebaovn), đạt lượng người xem ổn định.</p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Video Editing</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Content Creator</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onclick="openModal('financeModal')">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center text-yellow-400 mb-4">
+                        <i class="fas fa-chart-pie text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Tài chính & Đầu tư</h3>
+                    <p class="text-slate-400 text-sm mb-4">Kiến thức nền tảng vững chắc về cổ phiếu, trái phiếu, chứng chỉ quỹ và ứng dụng ngân hàng số.</p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Fintech</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Investment</span>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:-translate-y-2 transition-transform duration-300 cursor-pointer" onclick="openModal('leaderModal')">
+                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center text-orange-400 mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Kỹ năng Lãnh đạo</h3>
+                    <p class="text-slate-400 text-sm mb-4">Quản lý và điều phối Clan Gia Đình Nhìu Chiện (PUBG). Quản lý đội nhóm đa độ tuổi (1998 - 2009).</p>
+                    <div class="flex gap-2 flex-wrap mt-auto">
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Teamwork</span>
+                        <span class="text-xs px-2 py-1 bg-slate-800 rounded text-slate-300">Management</span>
                     </div>
                 </div>
             </div>
-
-            <!-- ================= VIEW: SKILLS ================= -->
-            <div id="view-skills" class="view-section hidden space-y-8 fade-in">
-                <!-- IT & Network -->
-                <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl">
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <i data-lucide="terminal" class="w-6 h-6 text-blue-400"></i> Hệ thống & Lập trình
-                    </h3>
-                    <div class="flex flex-wrap gap-3" id="skills-tech">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- AI & Automation -->
-                <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 opacity-5 text-white">
-                        <i data-lucide="cpu" class="w-48 h-48"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 relative z-10">
-                        <i data-lucide="zap" class="w-6 h-6 text-purple-400"></i> Trí Tuệ Nhân Tạo (AI)
-                    </h3>
-                    <div class="flex flex-wrap gap-3 relative z-10" id="skills-ai">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Soft Skills & Finance -->
-                <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl">
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <i data-lucide="target" class="w-6 h-6 text-orange-400"></i> Kỹ năng mềm & Tài chính
-                    </h3>
-                    <div class="flex flex-wrap gap-3" id="skills-soft">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </main>
+    </section>
 
-    <!-- ================= MODAL / POPUP ================= -->
-    <div id="modal-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden" onclick="closeModal()">
-        <div id="modal-content" class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all modal-enter" onclick="event.stopPropagation()">
-            <!-- Header Modal -->
-            <div class="sticky top-0 bg-slate-900/90 backdrop-blur border-b border-slate-800 p-4 flex justify-between items-center z-10">
-                <h3 id="modal-title" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-                    Title
-                </h3>
-                <button onclick="closeModal()" class="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-2xl text-white">PM<span class="text-brand-400">NHAT</span></span>
+                <p class="text-slate-500 text-sm mt-2">© 2026 Phạm Minh Nhật. All rights reserved.</p>
             </div>
-            <!-- Body Modal -->
-            <div class="p-6">
-                <h4 id="modal-subtitle" class="text-lg text-emerald-400 mb-2 font-medium">Subtitle</h4>
-                <p id="modal-period" class="text-slate-400 text-sm mb-6 flex items-center gap-2 hidden">
-                    <i data-lucide="zap" class="w-4 h-4"></i> <span id="modal-period-text"></span>
-                </p>
-                
-                <div id="modal-details" class="text-slate-300 leading-relaxed space-y-4">
-                    <!-- Dynamic details go here -->
-                </div>
+            <div class="flex gap-4">
+                <a href="https://thebao-vn.github.io/hosocanhan" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition-all">
+                    <i class="fas fa-globe"></i>
+                </a>
+                <a href="https://www.tiktok.com/@thebaovn?_r=1&_t=ZS-95aHur7zMUH" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="mailto:phamnhattkchinh@gmail.com" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-500 hover:text-white transition-all">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
-                <div id="modal-tags" class="mt-8 flex flex-wrap gap-2">
-                    <!-- Dynamic tags go here -->
-                </div>
+
+    <!-- ================= MODALS (POPUPS) ================= -->
+    <div id="modalOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4 transition-opacity opacity-0 duration-300">
+        
+        <!-- Modal Content Container -->
+        <div id="modalContainer" class="bg-cardBg border border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-enter relative">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors z-10">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Dynamic Content Injected Here via JS -->
+            <div id="modalBody" class="p-6 md:p-8">
+                <!-- Content -->
             </div>
         </div>
     </div>
 
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <!-- Data for Modals (Hidden) -->
+    <div class="hidden">
+        <div id="content-viettelModal">
+            <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-brand-500/20 rounded-xl flex items-center justify-center text-brand-400">
+                    <i class="fas fa-network-wired text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Viettel - CTV Kỹ thuật & Bán hàng</h2>
+                    <p class="text-brand-400 text-sm">08/2024 - Hiện tại</p>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Vai trò đảm nhiệm đa dạng các đầu việc từ kỹ thuật phần cứng, phần mềm đến kinh doanh tại Tập đoàn Viettel.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong class="text-white">Kỹ thuật mạng:</strong> Cấu hình và xử lý kỹ thuật thành thạo các dòng thiết bị mạng của Viettel (ZTE, Huawei, Dasan, SDMC, SCOM), VNPT (Igate, ZTE, Huawei, Nokia, Dasan) và toàn bộ thiết bị mạng FPT.</li>
+                    <li><strong class="text-white">Triển khai:</strong> Trực tiếp triển khai và thiết lập hệ thống mạng quy mô doanh nghiệp.</li>
+                    <li><strong class="text-white">Kinh doanh:</strong> Kinh doanh các mảng Sim số, Data, Thẻ cào, tư vấn lắp đặt Camera, Wifi và hỗ trợ khách hàng chuẩn hóa thông tin.</li>
+                    <li><strong class="text-white">Phát triển cá nhân:</strong> Tận dụng tốt lượng khách hàng lớn của Viettel làm đòn bẩy để xây dựng tệp khách hàng cá nhân.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content-thebaoModal">
+            <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
+                    <i class="fas fa-store text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Cửa hàng "THE BÁO" - Founder</h2>
+                    <p class="text-blue-400 text-sm">08/2024 - Hiện tại</p>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Khởi nghiệp và trực tiếp vận hành cửa hàng dịch vụ trực tuyến với những con số thực tế ấn tượng.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong class="text-white">Lĩnh vực:</strong> Chuyên về "Nạp Game Trực Tuyến" thị trường trong nước và quốc tế.</li>
+                    <li><strong class="text-white text-green-400">Thành tích nổi bật:</strong> Đạt tổng doanh thu <span class="font-bold">110.103.500 VNĐ</span> trong năm 2025.</li>
+                    <li><strong class="text-white">Tối ưu mô hình kinh doanh:</strong> Cơ cấu dịch vụ thông minh với: VNG (68%), Garena (16%), thẻ nước ngoài (1%) và các dịch vụ khác (15%).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content-webModal">
+            <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
+                    <i class="fas fa-laptop-code text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Lập trình Website & Tool</h2>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Tự học và áp dụng kiến thức lập trình để tạo ra các sản phẩm thực tế phục vụ công việc kinh doanh.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Trực tiếp thiết kế và lập trình các trang web bán hàng, web bán khóa học và web profile cho team game.</li>
+                    <li>Đã phát triển thành công <strong>công cụ bán hàng riêng</strong>, được lưu trữ và triển khai trên GitHub.</li>
+                    <li>Sử dụng thành thạo stack: <span class="text-brand-400">HTML, CSS, JavaScript</span> kết hợp với cơ sở dữ liệu <span class="text-brand-400">Firebase</span> để lưu trữ dữ liệu thời gian thực.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content-aiModal">
+            <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-brand-500/20 rounded-xl flex items-center justify-center text-brand-400">
+                    <i class="fas fa-robot text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Chuyên môn Ứng dụng AI</h2>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Nắm bắt xu hướng công nghệ, tôi tập trung vào việc biến AI thành trợ lý đắc lực trong công việc.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Sử dụng thành thạo và trực tiếp huấn luyện các mô hình LLM hàng đầu: <strong class="text-white">Gemini, ChatGPT, Claude, NotebookLM, Flow, AI Studio</strong>.</li>
+                    <li>Ứng dụng AI để viết content bán hàng, lên ý tưởng sáng tạo, kịch bản và thiết kế video.</li>
+                    <li>Ứng dụng AI để tự động hóa và nâng cao hiệu suất tin học văn phòng.</li>
+                </ul>
+                <div class="mt-6">
+                    <a href="https://drive.google.com/drive/folders/1Mit2vHtr9Rg28t5fETqP1m8RddB-HAwW" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-brand-500 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-external-link-alt mr-2 text-brand-400"></i> Xem Chứng chỉ AI của tôi
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="content-contactModal">
+             <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-brand-500/20 rounded-xl flex items-center justify-center text-brand-400">
+                    <i class="fas fa-address-card text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Thông tin liên hệ</h2>
+                </div>
+            </div>
+            <div class="space-y-6 text-slate-300">
+                <div class="flex items-center gap-4 bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                    <i class="fas fa-phone text-2xl text-brand-400 w-8 text-center"></i>
+                    <div>
+                        <p class="text-sm text-slate-400">Số điện thoại</p>
+                        <p class="text-lg font-bold text-white">0354830400</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                    <i class="fas fa-envelope text-2xl text-blue-400 w-8 text-center"></i>
+                    <div>
+                        <p class="text-sm text-slate-400">Email</p>
+                        <p class="text-lg font-bold text-white">phamnhattkchinh@gmail.com</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                    <i class="fas fa-map-marker-alt text-2xl text-red-400 w-8 text-center"></i>
+                    <div>
+                        <p class="text-sm text-slate-400">Địa chỉ</p>
+                        <p class="text-lg font-bold text-white">Xã Đại Hải, TP Cần Thơ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Generic fallback/others can be added similarly -->
+        <div id="content-mediaModal">
+            <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center text-pink-400">
+                    <i class="fab fa-tiktok text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Truyền thông Mạng xã hội</h2>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Tự xây dựng kênh truyền thông cá nhân để phục vụ xây dựng thương hiệu và kinh doanh.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Xây dựng, quản lý và tự tay chỉnh sửa video cho kênh TikTok cá nhân.</li>
+                    <li>Đạt được lượng người xem ổn định và thu hút khách hàng tiềm năng.</li>
+                </ul>
+                <div class="mt-6">
+                    <a href="https://www.tiktok.com/@thebaovn?_r=1&_t=ZS-95aHur7zMUH" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-pink-500 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fab fa-tiktok mr-2 text-pink-400"></i> Xem kênh @thebaovn
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-financeModal">
+             <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center text-yellow-400">
+                    <i class="fas fa-chart-pie text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Tài chính & Ứng dụng</h2>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Khả năng quản lý tài chính và ứng dụng công nghệ ngân hàng hiện đại.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Nắm bắt kiến thức nền tảng về đầu tư tài chính: cổ phiếu, trái phiếu, chứng chỉ quỹ.</li>
+                    <li>Thao tác thành thạo và khai thác tối đa tính năng trên đa dạng các ứng dụng ngân hàng số, viễn thông và mạng xã hội phục vụ luân chuyển dòng tiền kinh doanh.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content-leaderModal">
+             <div class="flex items-center gap-4 mb-6 border-b border-slate-700 pb-4">
+                <div class="w-14 h-14 bg-orange-500/20 rounded-xl flex items-center justify-center text-orange-400">
+                    <i class="fas fa-users text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Hoạt động & Lãnh đạo</h2>
+                </div>
+            </div>
+            <div class="space-y-4 text-slate-300">
+                <p>Kinh nghiệm quản lý con người thực tế thông qua các cộng đồng trực tuyến.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Đảm nhiệm vai trò quản lý, ban quản trị và điều phối các hoạt động của clan "Gia Đình Nhìu Chiện" trong game PUBG.</li>
+                    <li>Xử lý tình huống, gắn kết thành viên và quản lý đội nhóm có tính đa dạng cao về độ tuổi (gồm các thành viên sinh từ năm 1998 đến 2009).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // 1. Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
 
-        // ---------------- DATA ----------------
-        const modalData = {
-            exp1: {
-                title: "Viettel",
-                subtitle: "Cộng tác viên Kỹ thuật & Bán hàng",
-                period: "08/2024 - 03/2026",
-                details: [
-                    "Thực hiện các nghiệp vụ bán hàng và sửa chữa hạ tầng hệ thống mạng doanh nghiệp/cá nhân.",
-                    "Cấu hình chuyên sâu các dòng thiết bị: Viettel (ZTE, Huawei, Dasan, SDMC, SCOM), VNPT (Igate, Nokia) và FPT.",
-                    "Kinh doanh Sim số, Data, Thẻ cào, tư vấn lắp đặt Camera, Wifi.",
-                    "Tối ưu hóa tệp khách hàng lớn từ Viettel để làm đòn bẩy phát triển kinh doanh cá nhân."
-                ],
-                tags: ["Networking", "Sales", "Hardware", "Router Config"]
-            },
-            exp2: {
-                title: "THE BÁO Store",
-                subtitle: "Nhà sáng lập & Quản lý",
-                period: "08/2024 - 03/2026",
-                details: [
-                    "Xây dựng và vận hành toàn bộ quy trình kinh doanh dịch vụ Nạp Game Trực Tuyến trong và ngoài nước.",
-                    "Đạt tổng doanh thu 110.103.500 VNĐ chỉ riêng trong năm 2025.",
-                    "Quản lý danh mục đối tác và tỷ trọng doanh thu: VNG (68%), Garena (16%), Thẻ quốc tế (1%) và dịch vụ khác (15%).",
-                    "Ứng dụng tool tự viết để quản lý bán hàng và CRM."
-                ],
-                tags: ["Startup", "Management", "Finances", "Gaming"]
-            },
-            prj1: {
-                title: "Hệ sinh thái Bán hàng & Web Tool",
-                subtitle: "Fullstack Development",
-                details: "Trực tiếp lập trình các trang web bán hàng, web khóa học và profile cho team game. Phát triển công cụ quản lý bán hàng riêng lưu trữ trên GitHub, sử dụng HTML, CSS, JavaScript thuần kết hợp cơ sở dữ liệu thời gian thực Firebase.",
-                tags: ["HTML/CSS/JS", "Firebase", "Web Design"]
-            },
-            prj2: {
-                title: "Quản lý truyền thông @thebaovn",
-                subtitle: "Social Media & Video Edit",
-                details: "Sản xuất video, edit bằng các công cụ hiện đại và ứng dụng AI (Flow, AI Studio) để tạo nội dung truyền thông thu hút, tiếp cận tệp khách hàng GenZ trên nền tảng TikTok.",
-                tags: ["Content Creation", "Video Editing", "AI Tools"]
-            }
-        };
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
 
-        const skillsData = {
-            tech: ["HTML/CSS/JS", "Firebase", "Git/GitHub", "Web Development", "Router Config (ZTE/Huawei/Igate)", "Network Troubleshooting"],
-            ai: ["Gemini Pro", "ChatGPT", "Claude", "NotebookLM", "AI Studio", "AI Video/Image Gen"],
-            soft: ["Quản lý team (1998-2009)", "Phân tích tài chính (Stock/Bond)", "Bán hàng", "Tin học văn phòng High-performance"]
-        };
-
-        // ---------------- TAB NAVIGATION ----------------
-        const pageTitles = {
-            'dashboard': { title: 'Tổng quan chỉ số', subtitle: 'Học sinh lớp 12 - Chuyên gia ứng dụng AI & Vận hành Hệ thống. Kết hợp tư duy kỹ thuật hệ thống, khả năng lập trình và độ nhạy bén trong kinh doanh.' },
-            'experience': { title: 'Lịch sử công việc', subtitle: 'Hành trình từ học sinh cấp 3 đến người vận hành thực tế hệ thống mạng và kinh doanh số.' },
-            'projects': { title: 'Dự án & Sản phẩm', subtitle: 'Các sản phẩm lập trình và truyền thông được xây dựng bằng công nghệ hiện đại và AI.' },
-            'skills': { title: 'Hệ sinh thái Kỹ năng', subtitle: 'Sự kết hợp giữa công nghệ lõi (Networking, Web), Trí tuệ nhân tạo và Tư duy kinh tế.' }
-        };
-
-        function switchTab(tabId) {
-            // Update Title
-            document.getElementById('page-title').innerText = pageTitles[tabId].title;
-            const subtitleEl = document.getElementById('page-subtitle');
-            if(pageTitles[tabId].subtitle) {
-                subtitleEl.innerText = pageTitles[tabId].subtitle;
-                subtitleEl.classList.remove('hidden');
-            } else {
-                subtitleEl.classList.add('hidden');
-            }
-
-            // Update Nav Buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
             });
-            document.getElementById('btn-' + tabId).classList.add('active');
+        });
 
-            // Toggle Views
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
+        // 2. Dashboard Chart Initialization (Chart.js)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('serviceChart').getContext('2d');
+            
+            // Set Chart.js defaults for Dark Theme
+            Chart.defaults.color = '#94a3b8'; // text-slate-400
+            Chart.defaults.font.family = "'Inter', sans-serif";
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['VNG', 'Garena', 'Dịch vụ khác', 'Thẻ nước ngoài'],
+                    datasets: [{
+                        data: [68, 16, 15, 1],
+                        backgroundColor: [
+                            '#14b8a6', // brand-500
+                            '#3b82f6', // blue-500
+                            '#8b5cf6', // purple-500
+                            '#f59e0b'  // amber-500
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#1e293b', // card bg
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 14 },
+                            padding: 12,
+                            borderColor: 'rgba(45, 212, 191, 0.3)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
             });
-            document.getElementById('view-' + tabId).classList.remove('hidden');
-            
-            // Re-trigger animation
-            const viewEl = document.getElementById('view-' + tabId);
-            viewEl.classList.remove('fade-in');
-            void viewEl.offsetWidth; // trigger reflow
-            viewEl.classList.add('fade-in');
-        }
+        });
 
-        // ---------------- MODAL LOGIC ----------------
-        const modalOverlay = document.getElementById('modal-overlay');
+        // 3. Modal (Popup) System
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContainer = document.getElementById('modalContainer');
+        const modalBody = document.getElementById('modalBody');
 
-        function openModal(dataId) {
-            const data = modalData[dataId];
-            if (!data) return;
-
-            // Populate text
-            document.getElementById('modal-title').innerText = data.title;
-            document.getElementById('modal-subtitle').innerText = data.subtitle;
-            
-            // Period
-            const periodEl = document.getElementById('modal-period');
-            if (data.period) {
-                document.getElementById('modal-period-text').innerText = data.period;
-                periodEl.classList.remove('hidden');
+        function openModal(contentId) {
+            // Get content from hidden div
+            const sourceContent = document.getElementById('content-' + contentId);
+            if(sourceContent) {
+                modalBody.innerHTML = sourceContent.innerHTML;
             } else {
-                periodEl.classList.add('hidden');
+                modalBody.innerHTML = '<p class="text-white text-center">Nội dung đang được cập nhật...</p>';
             }
-
-            // Details (List or Paragraph)
-            const detailsContainer = document.getElementById('modal-details');
-            if (Array.isArray(data.details)) {
-                let html = '<ul class="space-y-3">';
-                data.details.forEach(item => {
-                    html += `
-                    <li class="flex gap-3">
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-blue-500 shrink-0 mt-1"></i>
-                        <span>${item}</span>
-                    </li>`;
-                });
-                html += '</ul>';
-                detailsContainer.innerHTML = html;
-            } else {
-                detailsContainer.innerHTML = `<p>${data.details}</p>`;
-            }
-
-            // Tags
-            const tagsContainer = document.getElementById('modal-tags');
-            if (data.tags && data.tags.length > 0) {
-                tagsContainer.innerHTML = data.tags.map(tag => 
-                    `<span class="px-3 py-1 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-xs font-medium">${tag}</span>`
-                ).join('');
-            } else {
-                tagsContainer.innerHTML = '';
-            }
-
-            // Re-render lucide icons inside modal details
-            lucide.createIcons();
 
             // Show modal
             modalOverlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            // Small timeout to allow display:block to apply before changing opacity for transition
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContainer.classList.add('modal-enter-active');
+            }, 10);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            modalOverlay.classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            // Hide animation
+            modalOverlay.classList.add('opacity-0');
+            modalContainer.classList.remove('modal-enter-active');
+            
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+                // Restore body scroll
+                document.body.style.overflow = 'auto';
+            }, 300); // match transition duration
         }
 
-        // ---------------- RENDER SKILLS ON LOAD ----------------
-        function renderSkills() {
-            const techContainer = document.getElementById('skills-tech');
-            techContainer.innerHTML = skillsData.tech.map(skill => 
-                `<span class="px-4 py-2 bg-slate-950 border border-slate-700 text-slate-300 rounded-lg text-sm hover:border-blue-500 hover:text-blue-400 transition-colors cursor-default">${skill}</span>`
-            ).join('');
-
-            const aiContainer = document.getElementById('skills-ai');
-            aiContainer.innerHTML = skillsData.ai.map(skill => 
-                `<span class="px-4 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-200 rounded-lg text-sm hover:bg-purple-500/20 hover:border-purple-500/40 transition-colors cursor-default">${skill}</span>`
-            ).join('');
-
-            const softContainer = document.getElementById('skills-soft');
-            softContainer.innerHTML = skillsData.soft.map(skill => 
-                `<span class="px-4 py-2 bg-slate-950 border border-slate-700 text-slate-300 rounded-lg text-sm hover:border-orange-500 hover:text-orange-400 transition-colors cursor-default">${skill}</span>`
-            ).join('');
-        }
-
-        // Initialize things
-        renderSkills();
+        // Close on clicking outside the modal box
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
 
     </script>
 </body>
